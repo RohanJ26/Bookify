@@ -2,6 +2,7 @@ import React from "react";
 import { createContext,useContext, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword , GoogleAuthProvider , signInWithPopup } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMSEj6Q3eIRFOJqw_zgDosVN681eg5ZfE",
@@ -18,6 +19,7 @@ export const useFirebase = ()=> useContext(firebaseContext)
 
 const firebaseApp = initializeApp(firebaseConfig);
 const FirebaseAuth = getAuth(firebaseApp);
+const Firebasedb = getFirestore(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseProvider = (props) =>{
@@ -41,10 +43,22 @@ export const FirebaseProvider = (props) =>{
 
     const SignInwithGoogle = () => (signInWithPopup(FirebaseAuth,googleProvider));
 
+    const handleCreateNewListing = async (name, isbn, price) => {
+        return await addDoc(collection(Firebasedb, "books"), {
+          name,
+          isbn,
+          price,
+          userID: user.uid,
+          userEmail: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        });
+      };
+
     const isLoggedin = user ? true:false;
     
     return(
-        <firebaseContext.Provider value={{SignUpuserwithEmailandPassword , isLoggedin , SignInwithEmailandPassword , user , FirebaseAuth , SignInwithGoogle}}>
+        <firebaseContext.Provider value={{SignUpuserwithEmailandPassword , isLoggedin , SignInwithEmailandPassword , user , FirebaseAuth , SignInwithGoogle , handleCreateNewListing}}>
             {props.children}
         </firebaseContext.Provider>
     )
