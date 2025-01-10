@@ -1,8 +1,8 @@
 import React from "react";
 import { createContext,useContext, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword , GoogleAuthProvider , signInWithPopup } from "firebase/auth";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword , GoogleAuthProvider , signInWithPopup , updateProfile } from "firebase/auth";
+import { getFirestore, collection, addDoc, doc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMSEj6Q3eIRFOJqw_zgDosVN681eg5ZfE",
@@ -33,12 +33,18 @@ export const FirebaseProvider = (props) =>{
         });
     }, []);
 
-    const SignUpuserwithEmailandPassword = (email,password)=>{
-        createUserWithEmailAndPassword(FirebaseAuth,email,password);
+    const SignUpuserwithEmailandPassword = async (email,password,name)=>{
+        createUserWithEmailAndPassword(FirebaseAuth,email,password,name).
+        then(() => {
+            updateProfile(FirebaseAuth.currentUser,{
+                displayName: name
+            });
+         })
+        
     }
 
-    const SignInwithEmailandPassword = (email,password)=>{
-        signInWithEmailAndPassword(FirebaseAuth,email,password);
+    const SignInwithEmailandPassword = (email,password,displayName)=>{
+        signInWithEmailAndPassword(FirebaseAuth,email,password,displayName);
     }
 
     const SignInwithGoogle = () => (signInWithPopup(FirebaseAuth,googleProvider));
@@ -54,11 +60,15 @@ export const FirebaseProvider = (props) =>{
           photoURL: user.photoURL,
         });
       };
+    
+    const listAllBooks = () => {
+    return getDocs(collection(Firebasedb, "books"));
+    };
 
     const isLoggedin = user ? true:false;
     
     return(
-        <firebaseContext.Provider value={{SignUpuserwithEmailandPassword , isLoggedin , SignInwithEmailandPassword , user , FirebaseAuth , SignInwithGoogle , handleCreateNewListing}}>
+        <firebaseContext.Provider value={{SignUpuserwithEmailandPassword , isLoggedin , SignInwithEmailandPassword , user , FirebaseAuth , SignInwithGoogle , handleCreateNewListing , listAllBooks}}>
             {props.children}
         </firebaseContext.Provider>
     )

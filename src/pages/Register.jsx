@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const RegisterPage = ()=>{
 
     const firebase = useFirebase();
+    const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
@@ -18,13 +19,17 @@ const RegisterPage = ()=>{
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        await firebase.SignUpuserwithEmailandPassword(email,password);
+        await firebase.SignUpuserwithEmailandPassword(email,password,name);
     }
 
     return(
         <>
             <div className="text-center mt-5 font-medium text-3xl">REGISTER ACCOUNT</div>
             <form class="max-w-sm mx-auto mt-10" onSubmit={handleSubmit}>    
+            <div class="mb-5">
+                <label class="block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
+                <input class="bg-gray-50 border w-80 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={(e)=>(setName(e.target.value))} value={name} required />
+            </div>
             <div class="mb-5">
                 <label for="email" class="block mt-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                 <input type="email" id="email" class="bg-gray-50 border w-80 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@bookify.com" onChange={(e)=>(setEmail(e.target.value))} value={email} required />
