@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import AddListing from "./pages/AddListing";
 import Order from "./pages/Order";
 import Details from "./pages/Details"
+import ViewOrderDetails from "./pages/OrderDetails";
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router=createBrowserRouter(
       <Route path="/addListing" element={<AddListing/>}></Route>
       <Route path="/order" element={<Order/>}></Route>
       <Route path="/book/:bookid" element={<Details/>}></Route>
+      <Route path="/books/orders/:bookid" element={<ViewOrderDetails/>}></Route>
     </Route>
     </>
   )

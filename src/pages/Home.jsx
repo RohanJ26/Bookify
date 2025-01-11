@@ -16,7 +16,7 @@ const HomePage = ()=>{
         <div className="container mt-5 flex gap-5 flex-wrap px-10 py-5">
             {books.map((book) => (
             <Card
-                link={`/book/view/${book.id}`}
+                link={`/book/${book.id}`}
                 key={book.id}
                 id={book.id}
                 {...book.data()}
