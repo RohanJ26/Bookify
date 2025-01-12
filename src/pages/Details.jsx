@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useFirebase } from "../context/firebase";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import toast, {Toaster} from "react-hot-toast"
 
 const Details = () => {
     const params = useParams();
     const firebase = useFirebase();
+    const navigate = useNavigate();
 
     const [data,setData] = useState(null);
     const [qty,setQty] = useState(1);
+    useEffect(()=>{
+      if(firebase.isLoggedin==false){
+        toast("Login to your account", { id: "login-toast" });
+        navigate('/login')
+      }
+    },[])
     
     useEffect(() => {
         firebase.getBookById(params.bookid).then((val)=>(setData(val.data())));
-        console.log(data);
     },[]);
 
     const Order = async () => {
         const result = await firebase.placeOrder(params.bookid, qty);
         console.log("Order Placed", result);
     };
-    
+
     if (data == null) return <h1>Loading...</h1>;
     
-
     return(
+    <>
     <div className="flex flex-col gap-5 items-center"> 
       <h1 className="text-5xl font-semibold">{data.name}</h1>
       <h1 className="text-2xl">Details</h1>
@@ -41,6 +49,11 @@ const Details = () => {
         </form>
         <button className="bg-green-500 p-2 rounded-lg text-white font-semibold" onClick={Order}>Buy Now</button>
     </div>
+    <Toaster
+        position="top-center"
+        reverseOrder={true}
+    />
+    </>
     )
 }
 
