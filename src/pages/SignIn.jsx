@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFirebase } from "../context/firebase";
 import { useNavigate } from "react-router-dom";
+import toast,{Toaster} from "react-hot-toast";
 
 const SignIn = ()=>{
 
@@ -20,9 +21,11 @@ const SignIn = ()=>{
         
         e.preventDefault();
         await firebase.SignInwithEmailandPassword(email,password);
+        toast.success('Signed In successfully');
     }
     
     return(
+        <>
         <div className="flex flex-col justify-center items-center ">
             <div class="flex flex-col justify-center items-center  max-w-md">
                 <div className="text-center mt-5 font-medium text-3xl">SIGN IN ACCOUNT</div>
@@ -51,6 +54,12 @@ const SignIn = ()=>{
                 </form>
             </div>
         </div>
+        <Toaster
+            position="top-center"
+            reverseOrder={true}
+        />
+
+        </>
     )
 
 }

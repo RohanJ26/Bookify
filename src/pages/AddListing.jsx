@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useFirebase } from "../context/firebase";
+import { useNavigate } from "react-router-dom";
+import toast,{Toaster} from "react-hot-toast";
 
 const AddListing = ()=>{
 
@@ -8,13 +10,17 @@ const AddListing = ()=>{
     const [bookName , SetBookName] = useState("");
     const [isbn , SetIsbn] = useState("");
     const [price , SetPrice] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
         await firebase.handleCreateNewListing(bookName, isbn, price);
+        toast.success(`${bookName} added successfully`);
+        navigate('/')
     }
 
     return(
+        <>
         <div className="flex flex-col justify-center items-center ">
             <div className="text-center mt-5 font-medium text-3xl">ADD BOOKS HERE</div>
             <form class="max-w-sm mx-auto mt-10" onSubmit={handleSubmit}>    
@@ -33,6 +39,11 @@ const AddListing = ()=>{
                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Book</button>
             </form>
         </div>
+        <Toaster
+            position="top-center"
+            reverseOrder={true}
+        />
+        </>
     )
 }
 

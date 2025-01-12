@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFirebase } from "../context/firebase";
 import { useNavigate } from "react-router-dom";
+import toast, {Toaster} from "react-hot-toast";
 
 const RegisterPage = ()=>{
 
@@ -20,6 +21,7 @@ const RegisterPage = ()=>{
     const handleSubmit = async (e)=>{
         e.preventDefault();
         await firebase.SignUpuserwithEmailandPassword(email,password,name);
+        toast.success('Registered successfully');
     }
 
     return(
@@ -40,6 +42,10 @@ const RegisterPage = ()=>{
             </div>
             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</button>  
             </form>
+            <Toaster
+                position="top-center"
+                reverseOrder={true}
+            />
         </>
     )  
 

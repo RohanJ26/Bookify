@@ -2,6 +2,7 @@ import React from "react";
 import { useFirebase } from "../context/firebase";
 import { signOut } from "firebase/auth";
 import {useNavigate} from "react-router-dom"
+import toast,{Toaster} from "react-hot-toast";
 
 const Navbar = ()=>{
 
@@ -14,9 +15,11 @@ const Navbar = ()=>{
     const HandleLogout = async ()=>{
         await signOut(firebase.FirebaseAuth);
         navigate('/login')
+        toast.success('Logged Out successfully');
     }
 
     return(
+        <>
         <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -61,6 +64,12 @@ const Navbar = ()=>{
             </div>
         </div>
         </nav>
+        <Toaster
+            position="top-center"
+            reverseOrder={true}
+        />
+
+        </>
     )
 }
 
